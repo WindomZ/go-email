@@ -1,10 +1,5 @@
 package email
 
-import (
-	"runtime"
-	"time"
-)
-
 type failEmail struct {
 	email *Email
 	err   error
@@ -16,24 +11,7 @@ var (
 	failEmails    []*failEmail
 )
 
-func init() {
-	// TODO: 配置信息加载 -> 初始化
-	runtime.GOMAXPROCS(2) // 待定
-	c := &Config{User: "xxxx@163.com",
-		Password:  "xxxx",
-		Host:      "smtp.163.com",
-		Port:      "465",
-		SSL:       true,
-		Sleep:     3000 * time.Millisecond,
-		WorkerCnt: 3,
-	}
-	cs := make([]*Config, 3)
-	for i := 0; i < 3; i++ {
-		cs[i] = c
-	}
-	Init(cs)
-}
-
+// TODO: 配置信息加载 -> 初始化
 func Init(cs []*Config) {
 	dispatchers = make(map[string]*Dispatcher, 1)
 	dispatchers[ROLE_DEFAULT.String()] = NewDispatcher(ROLE_DEFAULT, cs)

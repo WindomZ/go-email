@@ -7,7 +7,24 @@ import (
 	"time"
 )
 
-// TODO: 收信人地址
+// TODO: 请填写配置信息
+func init() {
+	c := &Config{User: "xxxx@163.com",
+		Password:  "xxxx",
+		Host:      "smtp.163.com",
+		Port:      "465",
+		SSL:       true,
+		Sleep:     3000 * time.Millisecond,
+		WorkerCnt: 3,
+	}
+	cs := make([]*Config, 3)
+	for i := 0; i < 3; i++ {
+		cs[i] = c
+	}
+	Init(cs)
+}
+
+// TODO: 请填写收信人地址
 const TO = "xxxx@163.com"
 
 var testIndex int = -1
