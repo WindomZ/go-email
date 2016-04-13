@@ -2,7 +2,7 @@ package email
 
 import (
 	"crypto/tls"
-	"git.yichui.net/zj/mall/api/libs/uuid"
+	"github.com/WindomZ/go-macro/uuid"
 	"io"
 	"net"
 	"net/mail"
