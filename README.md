@@ -4,9 +4,7 @@
 
 ## Overview
 
-* Support SMTP email
-
-# Getting Started
+* Support SMTP emai
 
 ## Installation
 
@@ -17,7 +15,7 @@ go get -u github.com/WindomZ/go-email
 ## TODO
 
 * Usage and demos
-* More practical functions
+* More useful functions
 * More Test and Benchmark
 
 ## LICENSE
