@@ -1,5 +1,7 @@
 # go-email
 
+**This project is still in development :)**
+
 ## Overview
 
 * Support SMTP email
