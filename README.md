@@ -4,7 +4,7 @@
 
 ## Overview
 
-* Support SMTP emai
+* Support SMTP email
 
 ## Installation
 
