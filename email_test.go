@@ -17,7 +17,7 @@ func init() {
 		Size:     10,
 	}
 	SetConfig(c)
-	Start()
+	StartService()
 }
 
 // TODO: 请填写收信人地址
@@ -64,4 +64,5 @@ func TestMultiEmails(t *testing.T) {
 
 func TestWait(t *testing.T) {
 	time.Sleep(time.Second)
+	StopService()
 }

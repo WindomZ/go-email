@@ -15,7 +15,7 @@ func SetConfig(cs ...*Config) {
 	}
 }
 
-func Start() error {
+func StartService() error {
 	if pools == nil || len(pools) == 0 {
 		return ERR_POOL
 	}
@@ -27,7 +27,7 @@ func Start() error {
 	return nil
 }
 
-func Stop() error {
+func StopService() error {
 	if pools == nil || len(pools) == 0 {
 		return ERR_POOL
 	}
