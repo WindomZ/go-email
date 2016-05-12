@@ -45,19 +45,24 @@ func (p *Pool) Start() {
 					continue
 				} else if !open {
 					if s, err = d.Dial(); err != nil {
-						panic(err)
+						if e.FailToSend(err) {
+							SendEmail(e)
+						}
+						continue
 					}
 					open = true
 				}
 				if err := gomail.Send(s, e.Message); err != nil {
-					e.FailToSend(err)
+					if e.FailToSend(err) {
+						SendEmail(e)
+					}
 				} else {
 					e.SuccessToSend()
 				}
 			case <-time.After(30 * time.Second):
 				if open {
 					if err := s.Close(); err != nil {
-						panic(err)
+						//panic(err)
 					}
 					open = false
 				}

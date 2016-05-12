@@ -3,6 +3,7 @@ package goemail
 import (
 	"fmt"
 	"gopkg.in/gomail.v2"
+	"strings"
 )
 
 const (
@@ -10,7 +11,7 @@ const (
 	TYPE_PLAIN = "plain"
 )
 
-type EmailErrorFunc func(error) bool
+type EmailErrorFunc func(*Email, error) bool
 
 type Email struct {
 	Tag       string
@@ -50,6 +51,13 @@ func NewNormalOneEmail(to string, subject, content, _type string, fs ...EmailErr
 	return NewNormalEmail(subject, content, _type, fs...).SetTo(to)
 }
 
+func (e *Email) String() string {
+	if to := e.Message.GetHeader("To"); to != nil && len(to) != 0 {
+		return fmt.Sprintf("%v:%v", e.Tag, strings.Join(to, " & "))
+	}
+	return e.Tag
+}
+
 func (e *Email) AddTag(tag string) *Email {
 	e.Tag += "-" + tag
 	return e
@@ -75,10 +83,14 @@ func (e *Email) Valid() bool {
 }
 
 func (e *Email) SuccessToSend() {
+	if e.ErrorFunc != nil {
+		e.ErrorFunc(e, nil)
+	}
 }
 
-func (e *Email) FailToSend(err error) {
+func (e *Email) FailToSend(err error) bool {
 	if e.ErrorFunc != nil {
-		e.ErrorFunc(err)
+		return e.ErrorFunc(e, err)
 	}
+	return false
 }
