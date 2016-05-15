@@ -34,7 +34,7 @@ func newTestEmail() *Email {
 	return NewNormalOneEmail(TO, fmt.Sprintf("Subject(标题)(%v)", testIndex), "Hello <b>Bold</b> and <i>Italics</i>!", TYPE_HTML, panicFunc)
 }
 
-func panicFunc(err error) bool {
+func panicFunc(e *Email, err error) bool {
 	panic(err)
 	return true
 }

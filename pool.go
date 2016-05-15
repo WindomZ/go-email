@@ -7,6 +7,7 @@ import (
 
 type Pool struct {
 	pipe   chan *Email
+	error  chan error
 	config *Config
 }
 
@@ -18,6 +19,7 @@ func NewPool(c *Config) *Pool {
 	}
 	return &Pool{
 		pipe:   make(chan *Email, c.Size),
+		error:  make(chan error),
 		config: c,
 	}
 }
@@ -53,11 +55,22 @@ func (p *Pool) Start() {
 					open = true
 				}
 				if err := gomail.Send(s, e.Message); err != nil {
+					p.error <- err
 					if e.FailToSend(err) {
 						SendEmail(e)
 					}
 				} else {
 					e.SuccessToSend()
+				}
+			case e, ok := <-p.error:
+				if !ok {
+					return
+				} else if e != nil {
+					if open {
+						if err := s.Close(); err != nil {
+						}
+						open = false
+					}
 				}
 			case <-time.After(30 * time.Second):
 				if open {
