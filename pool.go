@@ -57,7 +57,7 @@ func (p *Pool) Start() {
 				if err := gomail.Send(s, e.Message); err != nil {
 					p.error <- err
 					if e.FailToSend(err) {
-						SendEmail(e)
+						SendEmailDelay(e)
 					}
 				} else {
 					e.SuccessToSend()

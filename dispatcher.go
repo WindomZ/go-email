@@ -1,5 +1,7 @@
 package goemail
 
+import "time"
+
 var pools []*Pool
 
 func SetConfig(cs ...*Config) {
@@ -59,4 +61,11 @@ func SendEmail(e *Email) error {
 		}
 	}
 	return nil
+}
+
+func SendEmailDelay(e *Email) {
+	go func() {
+		time.Sleep(time.Second * 3)
+		SendEmail(e)
+	}()
 }
