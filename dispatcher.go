@@ -1,6 +1,9 @@
 package goemail
 
-import "time"
+import (
+	"strconv"
+	"time"
+)
 
 var pools []*Pool
 
@@ -56,7 +59,10 @@ func SendEmail(e *Email) error {
 		sendIdx++
 		if e.TryCount >= 5 {
 			return ERR_EMAIL_TOO_MUCH
-		} else if err := p.Send(e.SetFrom(p.config.User).Increase()); err != nil {
+		} else if err := p.Send(e.
+			AddTag(strconv.Itoa(sendIdx)).
+			SetFrom(p.config.User).
+			Increase()); err != nil {
 			return SendEmail(e)
 		}
 	}
