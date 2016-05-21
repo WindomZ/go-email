@@ -54,7 +54,7 @@ func SendEmail(e *Email) error {
 	}
 	if p := pools[sendIdx]; p != nil {
 		sendIdx++
-		if e.TryCount >= 3 {
+		if e.TryCount >= 5 {
 			return ERR_EMAIL_TOO_MUCH
 		} else if err := p.Send(e.SetFrom(p.config.User).Increase()); err != nil {
 			return SendEmail(e)

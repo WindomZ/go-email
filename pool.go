@@ -35,9 +35,8 @@ func (p *Pool) Start() {
 			p.config.User,
 			p.config.Password,
 		)
-		var s gomail.SendCloser
+		var s gomail.SendCloser = nil
 		var err error
-		open := false
 		for {
 			select {
 			case e, ok := <-p.pipe:
@@ -45,14 +44,13 @@ func (p *Pool) Start() {
 					return
 				} else if e == nil || !e.Valid() {
 					continue
-				} else if !open {
+				} else if s == nil {
 					if s, err = d.Dial(); err != nil {
 						if e.FailToSend(err) {
 							SendEmail(e)
 						}
 						continue
 					}
-					open = true
 				}
 				if err := gomail.Send(s, e.Message); err != nil {
 					p.error <- err
@@ -66,18 +64,18 @@ func (p *Pool) Start() {
 				if !ok {
 					return
 				} else if e != nil {
-					if open {
+					if s != nil {
 						if err := s.Close(); err != nil {
 						}
-						open = false
+						s = nil
 					}
 				}
 			case <-time.After(30 * time.Second):
-				if open {
+				if s != nil {
 					if err := s.Close(); err != nil {
 						//panic(err)
 					}
-					open = false
+					s = nil
 				}
 			}
 		}
