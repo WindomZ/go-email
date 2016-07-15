@@ -56,6 +56,9 @@ func SendEmail(e *Email) error {
 		sendIdx = 0
 	}
 	if p := pools[sendIdx]; p != nil {
+		if p.IsFull() {
+			return ERR_FULL_POOL
+		}
 		sendIdx++
 		if e.TryCount >= 5 {
 			return ERR_EMAIL_TOO_MUCH

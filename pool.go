@@ -15,7 +15,7 @@ func NewPool(c *Config) *Pool {
 	if c == nil {
 		return new(Pool)
 	} else if c.Size < 0 {
-		c.Size = 0
+		c.Size = 10
 	}
 	return &Pool{
 		pipe:   make(chan *Email, c.Size),
@@ -86,9 +86,15 @@ func (p *Pool) Stop() {
 	close(p.pipe)
 }
 
+func (p *Pool) IsFull() bool {
+	return len(p.pipe) >= p.config.Size
+}
+
 func (p *Pool) Send(e *Email) error {
 	if e == nil || !e.Valid() {
 		return ERR_EMAIL
+	} else if p.IsFull() {
+		return ERR_FULL_POOL
 	}
 	p.pipe <- e
 	return nil
