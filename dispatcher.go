@@ -74,7 +74,7 @@ func SendEmail(e *Email) error {
 
 func SendEmailDelay(e *Email) {
 	go func() {
-		time.Sleep(time.Second * 3)
+		time.Sleep(time.Second)
 		SendEmail(e)
 	}()
 }
