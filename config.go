@@ -4,6 +4,7 @@ type Config struct {
 	Host     string
 	Port     int
 	User     string
+	Name     string
 	Password string
 	SSL      bool
 	Size     int

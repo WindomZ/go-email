@@ -63,8 +63,11 @@ func (e *Email) AddTag(tag string) *Email {
 	return e
 }
 
-func (e *Email) SetFrom(from string) *Email {
-	e.Message.SetHeader("From", from)
+func (e *Email) SetFrom(add, name string) *Email {
+	if len(name) == 0 {
+		name = add
+	}
+	e.Message.SetAddressHeader("From", add, name)
 	return e
 }
 

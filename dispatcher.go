@@ -64,7 +64,7 @@ func SendEmail(e *Email) error {
 			return ERR_EMAIL_TOO_MUCH
 		} else if err := p.Send(e.
 			AddTag(strconv.Itoa(sendIdx)).
-			SetFrom(p.config.User).
+			SetFrom(p.config.User, p.config.Name).
 			Increase()); err != nil {
 			return SendEmail(e)
 		}
