@@ -7,17 +7,13 @@ import (
 )
 
 // TODO: 请填写配置信息
-func init() {
-	c := &Config{
-		Host:     "smtp.163.com",
-		Port:     465,
-		User:     "xxxx@163.com",
-		Password: "xxxx",
-		SSL:      true,
-		Size:     10,
-	}
-	SetConfig(c)
-	StartService()
+var config = &Config{
+	Host:     "smtp.163.com",
+	Port:     465,
+	User:     "xxxx@163.com",
+	Password: "xxxx",
+	SSL:      true,
+	Size:     10,
 }
 
 // TODO: 请填写收信人地址
@@ -25,18 +21,34 @@ const TO = "xxxx@163.com"
 
 var testIndex int = -1
 
-func TestInit(t *testing.T) {
-}
-
 func newTestEmail() *Email {
 	testIndex++
-	//return NewNormalOneEmail(TO, fmt.Sprintf("Subject(标题)(%v)", testIndex), "This is Content(测试中文内容)", TYPE_PLAIN, panicFunc)
-	return NewNormalOneEmail(TO, fmt.Sprintf("Subject(标题)(%v)", testIndex), "Hello <b>Bold</b> and <i>Italics</i>!", TYPE_HTML, panicFunc)
+	return NewNormalOneEmail(
+		TO,
+		fmt.Sprintf("Subject(标题)(%v)", testIndex),
+		"This is Content(测试中文内容)",
+		TYPE_PLAIN,
+		panicFunc,
+	)
+	//return NewNormalOneEmail(
+	//	TO,
+	//	fmt.Sprintf("Subject(标题)(%v)", testIndex),
+	//	"Hello <b>Bold</b> and <i>Italics</i>!",
+	//	TYPE_HTML,
+	//	panicFunc,
+	//)
 }
 
 func panicFunc(e *Email, err error) bool {
-	panic(err)
+	if err != nil {
+		panic(err)
+	}
 	return true
+}
+
+func TestInit(t *testing.T) {
+	SetConfig(config)
+	StartService()
 }
 
 func TestOneEmail(t *testing.T) {
@@ -63,6 +75,6 @@ func TestMultiEmails(t *testing.T) {
 }
 
 func TestWait(t *testing.T) {
-	time.Sleep(time.Second)
+	time.Sleep(time.Second * 5)
 	StopService()
 }

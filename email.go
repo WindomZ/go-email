@@ -22,6 +22,7 @@ type Email struct {
 
 var idxEmail int64 = -1
 
+// NewEmail create a new email object
 func NewEmail(m *gomail.Message, fs ...EmailErrorFunc) *Email {
 	idxEmail++
 	e := &Email{
@@ -35,6 +36,7 @@ func NewEmail(m *gomail.Message, fs ...EmailErrorFunc) *Email {
 	return e
 }
 
+// NewNormalEmail create a normal email object, defind subject, content, type(html or plain)
 func NewNormalEmail(subject, content, _type string, fs ...EmailErrorFunc) *Email {
 	m := gomail.NewMessage()
 	m.SetHeader("Subject", subject)
@@ -47,6 +49,7 @@ func NewNormalEmail(subject, content, _type string, fs ...EmailErrorFunc) *Email
 	return NewEmail(m, fs...)
 }
 
+// NewNormalOneEmail create a normal email object, defind subject, content, type(html or plain) and one receiver
 func NewNormalOneEmail(to string, subject, content, _type string, fs ...EmailErrorFunc) *Email {
 	return NewNormalEmail(subject, content, _type, fs...).SetTo(to)
 }
@@ -86,13 +89,13 @@ func (e *Email) Valid() bool {
 }
 
 func (e *Email) SuccessToSend() {
-	if e.ErrorFunc != nil {
+	if e != nil && e.ErrorFunc != nil {
 		e.ErrorFunc(e, nil)
 	}
 }
 
 func (e *Email) FailToSend(err error) bool {
-	if e.ErrorFunc != nil {
+	if e != nil && e.ErrorFunc != nil {
 		return e.ErrorFunc(e, err)
 	}
 	return false
